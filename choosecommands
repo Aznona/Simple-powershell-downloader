@@ -1,0 +1,23 @@
+# Show a dialog box to choose the action to execute
+$selectedAction = New-Object System.Management.Automation.Host.ChoiceDescription("&Restart-Computer", "Restart the computer.")
+$selectedAction2 = New-Object System.Management.Automation.Host.ChoiceDescription("&Stop-Computer", "Stop the computer.")
+$selectedAction3 = New-Object System.Management.Automation.Host.ChoiceDescription("&Shutdown", "Shutdown the computer.")
+$options = [System.Management.Automation.Host.ChoiceDescription[]]($selectedAction, $selectedAction2, $selectedAction3)
+$title = "Select Action"
+$message = "Please select an action to execute:"
+$defaultChoice = 0
+$choice = $host.UI.PromptForChoice($title, $message, $options, $defaultChoice)
+
+# Execute the chosen action
+switch ($choice) {
+    0 { Restart-Computer }
+    1 { Stop-Computer }
+    2 { & shutdown /s }
+}
+
+# Execute the progress bar
+$TotalCount = 100
+for ($i=1; $i -le $TotalCount; $i++) {
+    Write-Progress -Activity "Processing Items" -Status "Processing item $i of $TotalCount" -PercentComplete ($i / $TotalCount * 100)
+    Start-Sleep -Milliseconds 50
+}
